@@ -1,24 +1,10 @@
 body{
     /*width: 600px;*/
     margin:0 ;
-    /*background-color:black ;
-    padding:0 20px 20px 20px ;
-    border: 30px darkred;*/
-}
-.intro {
-    display: table;
-    width: 100vw;
-    height: 100vh;
-    padding: 0;
-    color: black;
-    background: url(Imagens/Home.png);
-    background-position: 30% 45%;
-    background-color: black;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    background-size: cover;
-
-
+    background-image: url(Imagens/Home.png);/*Aqui você coloca o link da sua imagem*/
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 .examplemonospace {
  font-family: 'Courier New', Courier, monospace;
@@ -33,17 +19,6 @@ td {
     vertical-align: middle;
 }
 h3 {color: gray;}
-/*h1{
-    color: lightslategray;
-    font-family:serif;
-    font-size: 40px;
-    font-style: italic;
-    text-align: center;
-    width: 1000px;
-    margin: 0;
-    padding:30px 0;
-    text-shadow: 3px 3px 1px blueviolet;
-}*/
 button {
     background-color: silver;
     border:none;
