@@ -8,10 +8,14 @@ body{
 .examplemonospace {
  font-family: 'Courier New', Courier, monospace;
 }
+table {
+    border-collapse: separate; 
+    border-spacing: 15px;
+    margin: 0 0 0 0;
+}
 td {
     text-align: center;
     vertical-align: middle;
-    border-right: 20px;
 }
 h3 {color: gray;}
 h1{
