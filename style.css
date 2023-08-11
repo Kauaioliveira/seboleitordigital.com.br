@@ -1,6 +1,7 @@
 body{
     /*width: 600px;*/
     margin:0 ;
+    width:0;
     background-image: url(Imagens/Home.png);/*Aqui você coloca o link da sua imagem*/
     background-size: 100% 100%;
     background-repeat: no-repeat;
@@ -13,6 +14,7 @@ table {
     border-collapse: separate; 
     border-spacing: 15px;
     margin: 0 0 0 0;
+    width: 20;
 }
 td {
     text-align: center;
