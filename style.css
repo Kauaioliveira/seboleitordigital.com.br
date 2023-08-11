@@ -27,7 +27,7 @@ h1{
 }
 button {
     background-color: silver;
-    border:none;
+    border:40px;
     color: black;
     display: inline;
     font-size: 20px;
