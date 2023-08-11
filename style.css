@@ -5,6 +5,16 @@ body{
     padding:0 20px 20px 20px ;
     border: 30px darkred;
 }
+.intro {
+    display: table;
+    width: 100%;
+    height: 100%;
+    padding: 100px 0;
+    color: black;
+    background: url(Imagens/Home.png) ;
+
+
+}
 .examplemonospace {
  font-family: 'Courier New', Courier, monospace;
 }
@@ -18,7 +28,7 @@ td {
     vertical-align: middle;
 }
 h3 {color: gray;}
-h1{
+/*h1{
     color: lightslategray;
     font-family:serif;
     font-size: 40px;
@@ -27,8 +37,8 @@ h1{
     width: 1000px;
     margin: 0;
     padding:30px 0;
-    text-shadow: 3px 3px 1px darkred;
-}
+    text-shadow: 3px 3px 1px blueviolet;
+}*/
 button {
     background-color: silver;
     border:none;
@@ -38,4 +48,3 @@ button {
     font-style: oblique;
     text-decoration: none;
 }
-
