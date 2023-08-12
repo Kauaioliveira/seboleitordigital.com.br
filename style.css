@@ -4,8 +4,8 @@ body{
     width:0;
     background-image: url(Imagens/Home.png);/*Aqui você coloca o link da sua imagem*/
     background-size: 100% 100%;
-    background-repeat: repeat;
-    background-position: center;
+    background-repeat: no-repeat;
+    background-position: complete;
 }
 .examplemonospace {
  font-family: 'Courier New', Courier, monospace;
