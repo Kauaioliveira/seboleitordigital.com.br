@@ -4,7 +4,7 @@ body{
     margin: 0;
     background-image: url(Imagens/Home.png);/*Aqui você coloca o link da sua imagem*/
     background-size: 100% 100%;
-    background-repeat: repeat;
+    background-repeat: no-repeat;
     background-position: center;
 }
 .examplemonospace {
@@ -15,6 +15,7 @@ table {
     border-spacing: 15px;
     margin: 0 0 0 0;
     width: 80;
+    height: 50;
 }
 td {
     text-align: center;
