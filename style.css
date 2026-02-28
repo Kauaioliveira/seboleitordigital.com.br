@@ -1,24 +1,52 @@
 
 body{
-    width: 600px;
+    width:auto;
     margin: 0;
-    background-image: url(Imagens/Home2.png);
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-.examplemonospace {
- font-family: 'Courier New', Courier, monospace;
+    background-size: 100% 100%; /*tamanho da imagem de fundo*/
+    background-color: #f0f0f0;  /*cor de fundo*/
+    font-family: 'Courier New', Courier, monospace;  /*fonte do texto*/
+    font-size: 16px;  /*tamanho da fonte*/
+    text-align: center;  /*alinhamento do texto*/
+    color: #333;  /*cor do texto*/
+    padding: 40px;  /*padding do texto*/
+    margin: 0;  /*margem do texto*/
+    border: 1px solid #333;  /*borda do texto*/
+    border-radius: 12px 12px 12px 12px;  /*raio da borda*/
+    box-shadow: 0 0 800px 0 rgba(0, 0, 0, 0.5);  /*sombra do texto*/
+    text-shadow: 0 0 80px 0 rgba(0, 0, 0, 0.5);  /*sombra do texto*/
+    text-decoration: none;  /*decoracao do texto*/
+    text-transform: uppercase;  /*transformacao do texto*/
+    text-align: center;  /*alinhamento do texto*/
+    text-decoration: none;  /*decoracao do texto*/
+
 }
 table {
-    border-collapse: separate; 
-    border-spacing: 15px;
-    margin: 0 0 0 0;
-    width: 80;
-    height: 50;
+    border-collapse: separate;  /*separacao da tabela*/
+    border-spacing: 20px;  /*espacamento da tabela*/
+    margin: 0 0 0 0;  /*margem da tabela*/
+    width: 80;  /*largura da tabela*/
+    height: 50;  /*altura da tabela*/
 }
 td {
-    text-align: center;
-    vertical-align: middle;
+    text-align: center;  /*alinhamento do texto*/
+    vertical-align: middle;  /*alinhamento vertical do texto*/
+    font-size: 16px;  /*tamanho da fonte*/
+    font-weight: bold;  /*peso da fonte*/
+    color: #333;  /*cor do texto*/
+    text-align: center;  /*alinhamento do titulo do livro*/
+    text-decoration: none;  /*decoracao do titulo do livro*/  
+    text-transform: uppercase;  /*transformacao do titulo do livro*/
+    text-align: center;  /*alinhamento do titulo do livro*/
+    text-decoration: none;  /*decoracao do titulo do livro*/
 }
-h3 {color: gray;}
+h3 {color: gray;  /*cor do texto*/}
+.TituloLivro {
+    font-size: 16px;  /*tamanho da fonte*/
+    font-weight: bold;  /*peso da fonte*/
+    color: #333;  /*cor do texto*/
+    text-align: center;  /*alinhamento do texto*/
+    text-decoration: none;  /*decoracao do texto*/
+    text-transform: uppercase;  /*transformacao do texto*/
+    text-align: center;  /*alinhamento do texto*/
+    text-decoration: none;  /*decoracao do texto*/
+}
