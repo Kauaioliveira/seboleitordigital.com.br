@@ -13,6 +13,28 @@ img {
     padding: 20px;
 }
 
+.catalogo{
+    display: flex;
+    flex-wrap: wrap;
+    gap:16px;
+    padding: 16px;
+}
+
+.item{
+    width: 140px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    background: #fff;
+}
+
+.item img{
+    width: 100%;
+    height: auto;
+    padding: 0; /* tira o padding grande da imagem */
+    display: block;
+}
+
 .item .descricao {
     font-size: 0.9em;
     color: #666;
@@ -22,7 +44,7 @@ img {
 
   /*tema Dark*/
 body.dark{
-    backgroud:#1a1a1a;
+    background:#1a1a1a;
     color: #e0e0e0;
 }
 
