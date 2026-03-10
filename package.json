@@ -1,0 +1,25 @@
+{
+  "name": "seboleitordigital.com.br",
+  "version": "1.0.0",
+  "description": "É um site com  um acervo ainda pequeno de livros e quadrinhos.\r Façam um bom proveito dos livros disponivel no site!\r Mas para além disso, esse projeto foi é onde estudo e coloco o que estou aprendendo em pratica HTML, CSS.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kauaioliveira/seboleitordigital.com.br.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Kauaioliveira/seboleitordigital.com.br/issues"
+  },
+  "homepage": "https://github.com/Kauaioliveira/seboleitordigital.com.br#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "express-session": "^1.19.0"
+  }
+}
