@@ -1,0 +1,99 @@
+body {
+    background-color: #f4f4f4;
+    color:#333;
+}
+header{
+    background: #333;
+    color: #fff;
+    padding: 16px;
+}
+
+header .topo{
+    display: flex;
+    justify-content: space-between;/*titulo a esquerdaa, botão dark a direita*/
+    align-items: center;
+}
+
+img {
+    width: 90px;
+    height:auto ;
+    padding: 20px;
+}
+
+/*para ajustar o formato livros horinzontal*/
+#detalhes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px;
+}
+
+/*titulo e  texto "clique na capa" em uma linha sozinha*/
+#detalhes >h2,
+#detalhes > p{
+    width: 100%;
+}
+
+.item{
+    width: 180px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    background: #fff;
+}
+
+.item img{
+    width: 100%;
+    height: auto;
+    padding: 0; /* tira o padding grande da imagem */
+    display: block;
+}
+
+.item .descricao {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 0.5em;
+    line-height: 1.4;
+  }
+
+  /*tema Dark*/
+body.dark{
+    background:#1a1a1a;
+    color: #e0e0e0;
+}
+
+body.dark header {
+    background: #0d0d0d;
+    color: #e0e0e0;
+}
+
+body.dark .item,
+body.dark #detalhes {
+background: #2d2d2d;
+color: #e0e0e0;
+}
+
+/*botão dark mode */
+#dark {
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid  #fff;
+    background: #555;
+    color: #fff;
+    font-weight: bold;
+    transition: background 0.2, color 0.2s, transform 0.1s;
+}
+
+#dark:hover{
+    background: #777;
+    transform: translateY(-1px);
+}
+
+/*no tema escuro, inverter um pouco as cores para destacar*/
+body.dark #Dark{
+    background: #f4f4f4;
+    color: #333;
+    border-color: #f4f4f4;
+}
+

@@ -15,11 +15,6 @@ Mas para além disso, esse projeto foi é onde estudo e coloco o que estou apren
             <p class="TituloLivro">7 Hábitos das Pessoas Altamente Eficientes</p></td>
             <td><a href="https://drive.google.com/file/d/1lo2ojK58o0uGr1wkUkOVdzTk9r05Xfbf/view?usp=sharing"><img src="Imagens/LNSC.jpg" alt="Image" height="250" width="130"></a>
             <p class="TituloLivro">São Cipriano</p></td>
-            <td><a href=""><img src="" alt="" height="" width=""></a></td>
-            <td><a href=""><img src="" alt="" height="" width=""></a></td>
-            <td><a href=""><img src="" alt="" height="" width=""></a></td>
-            <td><a href=""><img src="" alt="" height="" width=""></a></td>     
-        </tr> 
         <tr>
           <td><a href="https://drive.google.com/file/d/1RDyvFpdgCunFVqAwU9LSY-jXdeaOsZMh/view?usp=sharing"><img src= "Imagens/sandmanmorte.jpg" alt="Image" height="250" width="130"></a></td>
           <td><a href="https://drive.google.com/file/d/1HwiHSGwBIfuNw67CqZuZxAa6fYuPpUU5/view"><img src= "Imagens/Sandman1.jfif" alt="Image" height="250" width="130"></a></td>
@@ -27,8 +22,4 @@ Mas para além disso, esse projeto foi é onde estudo e coloco o que estou apren
           <td><a href="https://drive.google.com/file/d/1pMpU58xOx3UkSL389BPycS-qL92g0mO7/view"><img src= "Imagens/sandman3.jfif" alt="Image" height="250" width="130"></a></td>
           <td><a href="https://drive.google.com/file/d/1-fUhNk9g06fMKzt1S92f2hBEaVH9tF53/view"><img src= "Imagens/sandman4.jpg" alt="Image" height="250" width="130"></a></td>
           <td><a href="https://drive.google.com/file/d/1l3LK0VrGTobuRSwmrE6aamV22brTeWEl/view?usp=sharing"><img src="Imagens/Sandman5.jfif" alt="Image" height="250" width="130"></a></td>
-          <td><a href=""><img src="" alt="" height="" width=""></a></td>
-          <td><a href=""><img src="" alt="" height="" width=""></a></td>
-          <td><a href=""><img src="" alt="" height="" width=""></a></td>
-            
       </table>
