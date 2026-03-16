@@ -1,59 +1,87 @@
-//server.js
+require('dotenv').config();
 
 const express = require('express');
-const path = require('path');
-const session = require('express-session');
+const path = require ('path');
+const session = require ('express-session');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const app = express();
-const PORT = 3000;  
+const PORT = 3000;
+const LIVROS_DIR = path.join(__dirname,  'livros');
 
-//Pasta dos arquivos (não exposta diretamente)
-const   LIVROS_DIR = path.join(__dirname, 'livros');
-
-//sessão simples ()
-app.use(session({ 
-    secret:'sua-chave-secreta-aqui',
+//SESSÃO
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'sua-chave-secreta-aqui',
     resave: false,
     saveUninitialized: false
 }));
 
-//servir site estatico
-app.use(express.static(path.join(__dirname,'public')));
+//PASSPORT
+app.use(passport.initialize());
+app.use(passport.session());
 
-//Rota de download protegida: só quem está "logado" baixa
-app.get('/api/download/:id', (req, res) => {
-    if (!req.session.user){
-        return res.status(401).json({error: 'faça login para baixar'});
-    }
+passport.serializeUser((user,done) => done(null, user));
+passport.deserializeUser((user,done)=> done(null, user));
 
+passport.use(new GoogleStrategy(
+  {
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: 'http://localhost:3000/auth/google/callback'
+  },
+    (accessToken,refreshToken,profile, done) => {
+        done(null, {
+          id: profile.id,
+           email: profile.emails?.[0]?.value,
+            name: profile.displayName
+          });
+        }
+      ));
+
+//Site estaticco (html, css, js, imagens)
+app.use(express.static(path.join(__dirname, 'public')));
+
+//função: só sontinua se estiver logado
+function soLogado(req, res, next) {
+    if (req.isAuthenticated()) return next();
+    res.redirect('/login.html');
+}
+
+//rotas Google
+app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+app.get('/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/login.html' }),
+    (req,res) => { res.redirect('/');}
+);
+
+app.get('/auth/logout', (req, res) => {
+    req.logout((err) =>{
+        if(err) return res.redirect('/');
+        res.redirect('/login.html');
+    });
+});
+
+//Download: só para logados
+app.get('/api/download/:id', soLogado, (req, res) => {
     const id = req.params.id;
-    //Evitar ../ no id (segurança)
-    if(id.includes('..')|| id.includes('/')) {
-        return res.status(400).json({error: 'id inválido.'});
+    if (id.includes('..') || id.includes('/')) {
+      return res.status(400).json({ error: 'id inválido.' });
     }
-
-    const  arquivo = path.join(LIVROS_DIR, `${id}.pdf`);
     const fs = require('fs');
+    const arquivo = path.join(LIVROS_DIR, `${id}.pdf`);
     if (!fs.existsSync(arquivo)) {
-        return res.status(404).json({error: 'Arquivo não encontrado.'});
+      return res.status(404).json({ error: 'Arquivo não encontrado.' });
     }
-
-    const nomeAmigavel = `${id}.pdf`;
-    res.download(arquivo, nomeAmigavel);
-});
-
-//Exemplo de "login"
-app.post('/api/login', express.json(), (req, res) =>{
-    const {email,senha} = req.body || {};
-    //Validação
-    req.session.user = {  email: email || 'user@teste.com'};
-    res.json({ ok :true});
-});
-app.post('/api/logout', (req, res) => {
-    req.session.destroy();
-    res.json({ ok: true });
+    res.download(arquivo, `${id}.pdf`);
   });
-  
+
+  // 7) Página inicial: quem não está logado vai para login
+app.get('/', (req, res, next) => {
+    if (!req.isAuthenticated()) return res.redirect('/login.html');
+    next();
+  });
   app.listen(PORT, () => {
-    console.log(`Servidor em http://localhost:${PORT}`);
+    console.log('Servidor em http://localhost:' + PORT);
   });
