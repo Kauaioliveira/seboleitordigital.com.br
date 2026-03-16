@@ -21,14 +21,15 @@ _(Adicione aqui uma imagem do site, ex.: tela do catálogo ou da página de logi
 - Dark mode
 - Layout responsivo (flexbox)
 
+## O que aprendi neste projeto
+- Fluxo OAuth com Google (redirect, callback, sessão).
+- Proteção de rotas no Express (download só para usuários autenticados).
+- Uso de variáveis de ambiente para não expor segredos no repositório
+
+
 ## Como rodar
 
 ```bash
 git clone https://github.com/Kauaioliveira/seboleitordigital.com.br.git
 cd seboleitordigital.com.br
 npm install
-
-## O que aprendi neste projeto
-Fluxo OAuth com Google (redirect, callback, sessão).
-Proteção de rotas no Express (download só para usuários autenticados).
-Uso de variáveis de ambiente para não expor segredos no repositório
