@@ -2,10 +2,6 @@
 
 Sebo digital com catálogo de livros e quadrinhos, login com Google e download de PDFs apenas para usuários logados. Projeto de estudo e portfólio (HTML, CSS, JavaScript, Node.js).
 
-## Screenshot
-
-_(Adicione aqui uma imagem do site, ex.: tela do catálogo ou da página de login.)_
-
 ## Tecnologias
 
 - **Backend:** Node.js, Express
