@@ -1,6 +1,16 @@
+/* Evita que larguras + padding estourem o layout no mobile */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 body {
     background-color: #f4f4f4;
     color:#333;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
 }
 header{
     background: #333;
@@ -82,7 +92,7 @@ color: #e0e0e0;
     background: #555;
     color: #fff;
     font-weight: bold;
-    transition: background 0.2, color 0.2s, transform 0.1s;
+    transition: background 0.2s, color 0.2s, transform 0.1s;
 }
 
 #dark:hover{
@@ -91,9 +101,79 @@ color: #e0e0e0;
 }
 
 /*no tema escuro, inverter um pouco as cores para destacar*/
-body.dark #Dark{
+body.dark #dark {
     background: #f4f4f4;
     color: #333;
     border-color: #f4f4f4;
+}
+
+/* ========== Telas pequenas (celular / tablet estreito) ========== */
+@media (max-width: 600px) {
+    header {
+        padding: 12px;
+    }
+
+    header .topo {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        text-align: center;
+    }
+
+    header .topo h1 {
+        font-size: 1.25rem;
+        line-height: 1.3;
+        margin: 0;
+    }
+
+    header .topo > div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    header > p {
+        font-size: 0.9rem;
+        line-height: 1.45;
+        margin: 0;
+    }
+
+    #detalhes {
+        padding: 12px;
+        gap: 12px;
+    }
+
+    #detalhes > h2 {
+        font-size: 1.15rem;
+    }
+
+    /* Cards ocupam a largura útil (uma coluna) */
+    .item {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .item h3 {
+        font-size: 1rem;
+        word-break: break-word;
+    }
+
+    footer p {
+        font-size: 0.9rem;
+    }
+}
+
+/* Telas muito estreitas: botões um pouco menores */
+@media (max-width: 380px) {
+    #dark {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+
+    header .topo a[href="/auth/logout"] {
+        font-size: 0.9rem;
+    }
 }
 
