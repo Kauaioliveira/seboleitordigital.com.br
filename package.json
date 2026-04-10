@@ -2,8 +2,9 @@
   "name": "seboleitordigital.com.br",
   "version": "1.0.0",
   "description": "É um site com  um acervo ainda pequeno de livros e quadrinhos.\r Façam um bom proveito dos livros disponivel no site!\r Mas para além disso, esse projeto foi é onde estudo e coloco o que estou aprendendo em pratica HTML, CSS.",
-  "main": "script.js",
+  "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
