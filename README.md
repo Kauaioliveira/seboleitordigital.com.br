@@ -1,27 +1,27 @@
 # Sebo Leitor Digital
 
-Sebo digital com catálogo de livros e quadrinhos, login com Google e download de PDFs apenas para usuários logados. Projeto de estudo e portfólio (HTML, CSS, JavaScript, Node.js).
+Sebo digital com catalogo de livros e quadrinhos, login com Google e download de PDFs apenas para usuarios logados. Projeto de estudo e portfolio (HTML, CSS, JavaScript, Node.js).
 
 ## Tecnologias
 
 - **Backend:** Node.js, Express
-- **Autenticação:** Passport.js (Google OAuth 2.0)
+- **Autenticacao:** Passport.js (Google OAuth 2.0)
 - **Front-end:** HTML, CSS, JavaScript (vanilla)
-- **Sessão:** express-session
+- **Sessao:** express-session
 
 ## Funcionalidades
 
 - Login com Google (OAuth)
-- Catálogo com descrições (clique na capa para ver detalhes)
-- Download de PDFs somente para usuários logados
+- Catalogo com descricoes (clique na capa para ver detalhes)
+- Download de PDFs somente para usuarios logados
 - Dark mode
 - Layout responsivo (flexbox)
 
 ## O que aprendi neste projeto
-- Fluxo OAuth com Google (redirect, callback, sessão).
-- Proteção de rotas no Express (download só para usuários autenticados).
-- Uso de variáveis de ambiente para não expor segredos no repositório
 
+- Fluxo OAuth com Google (redirect, callback, sessao).
+- Protecao de rotas no Express (download so para usuarios autenticados).
+- Uso de variaveis de ambiente para nao expor segredos no repositorio.
 
 ## Como rodar
 
@@ -29,3 +29,5 @@ Sebo digital com catálogo de livros e quadrinhos, login com Google e download d
 git clone https://github.com/Kauaioliveira/seboleitordigital.com.br.git
 cd seboleitordigital.com.br
 npm install
+npm start
+```

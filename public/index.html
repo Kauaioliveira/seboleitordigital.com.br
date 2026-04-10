@@ -1,70 +1,68 @@
 <!DOCTYPE html>
-<html lang="pt-br"> 
-    <head>
-        <meta charset="utf-8">
-        <title>Sebo leitor digital</title>
-        <link rel="stylesheet" href="style.css"/>
-        <link rel="icon" href="Imagens/3.00 3.00 3.50 4.20 4.50 5.25 4.50 5.00.png">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-        <meta name="description" content="Sebo leitor digital é um site com um acervo ainda pequeno de livros e quadrinhos. Façam um bom proveito dos livros disponivel no site!">
-        <meta name="keywords" content="sebo leitor digital, livros, quadrinhos, sebo digital, sebo online, sebo de livros, sebo de quadrinhos, sebo de livros online, sebo de quadrinhos online">
-    </head>
-    <body>
-      <header>
-        <div class="topo">
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <title>Sebo leitor digital</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="Imagens/3.00 3.00 3.50 4.20 4.50 5.25 4.50 5.00.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+      name="description"
+      content="Sebo leitor digital e um site com um acervo ainda pequeno de livros e quadrinhos. Faca bom proveito dos livros disponiveis no site."
+    >
+    <meta
+      name="keywords"
+      content="sebo leitor digital, livros, quadrinhos, sebo digital, sebo online, sebo de livros, sebo de quadrinhos, sebo de livros online, sebo de quadrinhos online"
+    >
+  </head>
+  <body>
+    <header>
+      <div class="topo">
         <h1>Sebo leitor digital</h1>
         <div>
-          <a href="/auth/logout" style="margin-right: 12px;">Sair</a>
+          <a href="/auth/logout" class="logout-link">Sair</a>
           <button id="dark">Dark Mode</button>
         </div>
-        </div>
-        <p>Sebo leitor digital é um site com um acervo ainda pequeno de livros e quadrinhos. Façam um bom proveito dos livros disponivel no site!</p>
+      </div>
+      <p>Sebo leitor digital e um site com um acervo ainda pequeno de livros e quadrinhos. Faca bom proveito dos livros disponiveis no site.</p>
+    </header>
 
-      </header>
+    <section id="detalhes">
+      <h2>Detalhes do livro</h2>
+      <p id="textoDescricao">Clique na capa do livro para ler a descricao.</p>
 
-          <section id="detalhes">
-            <h2>Detalhes do livro</h2>
-            <p id="textoDescricao">Clique na  capa do livro para ler a descrição.</p>
-          
-          <div class="item" data-descricao="Duna é um romance de ficção científica que narra a história de Paul Atreides e sua família no planeta desértico Arrakis, onde se encontra a especiaria mais valiosa do universo.">
-            <img  src="Imagens/Duna.png" alt=" Duna">
-          <h3>Duna</h3>
-          <p>Autor: Frank Herbert</p>
-          <a href="/api/download/duna" class="botao-download">Baixar PDF</a>
-          </div>
-          
-          <div class="item" data-descricao="A biografia de Steve Jobs, escrita por Walter Isaacson, é considerada a obra mais completa sobre a vida e a carreira do cofundador da Apple.">
-            <img src="Imagens/jobs.jfif" alt="Steve Jobs">
-          <h3>Steve Jobes</h3>
-          <p>Autor: Walter Isaacson</p>
-          <a href="/api/download/jobs" class="botao-download">Baixar PDF</a>
-          </div>
+      <div class="item" data-descricao="Duna e um romance de ficcao cientifica que narra a historia de Paul Atreides e sua familia no planeta desertico Arrakis, onde se encontra a especiaria mais valiosa do universo.">
+        <img src="Imagens/Duna.png" alt="Capa do livro Duna">
+        <h3>Duna</h3>
+        <p>Autor: Frank Herbert</p>
+        <a href="/api/download/duna" class="botao-download">Baixar PDF</a>
+      </div>
 
-          <div class="item" data-descricao="O Livro de São Cipriano é uma obra que combina elementos do catolicismo popular, da bruxaria ibérica, da magia negra, do espiritismo, da demonologia e da santaria cristianizada.">
-            <img src="Imagens/LNSC.jpg" alt="São Cipriano">
-            <h3>São Cipriano</h3>
-            <p>Autor: São Cipriano</p>
-            <a href="/api/download/saocipriano" class="botao-download">Baixar PDF</a>
-          </div>
+      <div class="item" data-descricao="A biografia de Steve Jobs, escrita por Walter Isaacson, e considerada a obra mais completa sobre a vida e a carreira do cofundador da Apple.">
+        <img src="Imagens/jobs.jfif" alt="Capa do livro Steve Jobs">
+        <h3>Steve Jobs</h3>
+        <p>Autor: Walter Isaacson</p>
+        <a href="/api/download/jobs" class="botao-download">Baixar PDF</a>
+      </div>
 
-          <div class="item" data-descricao="Código limpo é um estilo de programação que prioriza legibilidade, manutenção e eficiência, permitindo que outros desenvolvedores compreendam e modifiquem o código facilmente.">
-            <img src="Imagens/codigolimpo.png" alt="código limpo">
-            <h3>Código limpo</h3>
-            <p>Autor:Robert C. Martin </p>
-            <a href="/api/download/codigolimpo" class="botao-download">Baixar PDF</a>
-          </div>
+      <div class="item" data-descricao="O Livro de Sao Cipriano e uma obra que combina elementos do catolicismo popular, da bruxaria iberica, da magia negra, do espiritismo, da demonologia e da santaria cristianizada.">
+        <img src="Imagens/LNSC.jpg" alt="Capa do livro Sao Cipriano">
+        <h3>Sao Cipriano</h3>
+        <p>Autor: Sao Cipriano</p>
+        <a href="/api/download/saocipriano" class="botao-download">Baixar PDF</a>
+      </div>
 
-          <div class="item" data-descricao="">
-            <img src="" alt="">
-            <h3></h3>
-            <p>Autor: </p>
-          </div>
+      <div class="item" data-descricao="Codigo limpo e um estilo de programacao que prioriza legibilidade, manutencao e eficiencia, permitindo que outros desenvolvedores compreendam e modifiquem o codigo facilmente.">
+        <img src="Imagens/codigolimpo.png" alt="Capa do livro Codigo limpo">
+        <h3>Codigo limpo</h3>
+        <p>Autor: Robert C. Martin</p>
+        <a href="/api/download/codigolimpo" class="botao-download">Baixar PDF</a>
+      </div>
+    </section>
 
-        </section>
-          <footer>
-            <p>Copyright 2026 Sebo leitor digital</p>
-          </footer>
-          <script src="script.js"></script>
-    
-    </body>
- </html>
+    <footer>
+      <p>Copyright 2026 Sebo leitor digital</p>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>

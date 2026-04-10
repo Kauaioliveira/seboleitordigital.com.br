@@ -1,32 +1,34 @@
-//pega todos os livros (divs com classe "item")
 const itens = document.querySelectorAll('.item');
-//pega o parágrafo onde mostra a descrção
-const textoDescricao = document.getElementById("textoDescricao")
-//para cada livro, adiciona um "ouvinte" de clique.
-itens.forEach((item) => {
-    item.addEventListener('click', () => {
-        //lê o atributo data-descricao do livro clicado
-        const descricao = item.getAttribute('data-descricao');
-        //troca o texto na área de detalhes
-        textoDescricao.textContent = descricao;
+const textoDescricao = document.getElementById('textoDescricao');
+const botaoDark = document.getElementById('dark');
+const TEMA_DARK = 'dark';
 
-    })
+itens.forEach((item) => {
+  item.addEventListener('click', () => {
+    const descricao = item.getAttribute('data-descricao');
+    textoDescricao.textContent = descricao;
+  });
 });
 
-//Dark Mode
-const botaoDark = document.getElementById('dark');
-
-//carregar preferencia salva do usuario ao abrir  a pagina
-if (localStorage.getItem('tema')=== 'dark') {
-    document.body.classList.add('dark');
-    botaoDark.textContent = 'light Mode';
+function atualizarTextoBotao() {
+  const modoEscuroAtivo = document.body.classList.contains(TEMA_DARK);
+  botaoDark.textContent = modoEscuroAtivo ? 'Light Mode' : 'Dark Mode';
 }
 
-botaoDark.addEventListener('click', () => {
-    document.body.classList.toggle('dark');
-    if (document.body.classList.contains('dark')) {
-        localStorage.setItem('tema','dark');
-        botaoDark.textContent = 'Dark Mode'
-    }
-});
+if (localStorage.getItem('tema') === TEMA_DARK) {
+  document.body.classList.add(TEMA_DARK);
+}
 
+atualizarTextoBotao();
+
+botaoDark.addEventListener('click', () => {
+  const modoEscuroAtivo = document.body.classList.toggle(TEMA_DARK);
+
+  if (modoEscuroAtivo) {
+    localStorage.setItem('tema', TEMA_DARK);
+  } else {
+    localStorage.removeItem('tema');
+  }
+
+  atualizarTextoBotao();
+});
