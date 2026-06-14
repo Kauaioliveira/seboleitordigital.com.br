@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test test/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -19,12 +19,22 @@
     "url": "https://github.com/Kauaioliveira/seboleitordigital.com.br/issues"
   },
   "homepage": "https://github.com/Kauaioliveira/seboleitordigital.com.br#readme",
+  "devDependencies": {
+    "nock": "^14.0.10",
+    "supertest": "^7.1.4"
+  },
   "dependencies": {
-    "dotenv": "^17.3.1",
+    "@sentry/node": "^8.55.2",
+    "connect-redis": "^9.0.0",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "express-rate-limit": "^8.5.2",
     "express-session": "^1.19.0",
+    "helmet": "^8.2.0",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
-    "passport-microsoft": "^2.1.0"
+    "pino": "^10.3.1",
+    "pino-http": "^11.0.0",
+    "redis": "^6.0.0"
   }
 }

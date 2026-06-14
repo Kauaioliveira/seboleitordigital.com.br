@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ler livro — Sebo leitor digital</title>
+    <meta name="description" content="Leitor embutido para obras em domínio público (Project Gutenberg).">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+  </head>
+  <body class="read-page">
+    <header class="read-header">
+      <a class="btn btn--ghost" href="/">← Catálogo</a>
+      <h1 class="read-header__title" id="readTitle">Carregando…</h1>
+      <a class="btn btn--ghost hidden" href="#" id="readExternal" target="_blank" rel="noopener noreferrer">Abrir na origem</a>
+    </header>
+    <p class="status-msg hidden" id="readStatus" role="status"></p>
+    <div class="read-frame-wrap hidden" id="readFrameWrap">
+      <iframe class="read-frame" id="readFrame" title="Conteúdo do livro" sandbox="allow-same-origin allow-scripts"></iframe>
+    </div>
+    <div class="read-fallback hidden" id="readFallback"></div>
+    <script src="/read.js"></script>
+  </body>
+</html>

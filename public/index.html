@@ -2,67 +2,99 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8">
-    <title>Sebo leitor digital</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="Imagens/3.00 3.00 3.50 4.20 4.50 5.25 4.50 5.00.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sebo leitor digital — domínio público (Gutendex)</title>
     <meta
       name="description"
-      content="Sebo leitor digital e um site com um acervo ainda pequeno de livros e quadrinhos. Faca bom proveito dos livros disponiveis no site."
+      content="Catálogo de livros em português (domínio público) via Gutendex, leitura e download. PDF local de exemplo com login Google."
     >
-    <meta
-      name="keywords"
-      content="sebo leitor digital, livros, quadrinhos, sebo digital, sebo online, sebo de livros, sebo de quadrinhos, sebo de livros online, sebo de quadrinhos online"
-    >
+    <meta property="og:title" content="Sebo leitor digital">
+    <meta property="og:description" content="Catálogo Gutendex + leitor. Login opcional para favoritos e PDF de portfolio.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="pt_BR">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
   </head>
   <body>
-    <header>
-      <div class="topo">
-        <h1>Sebo leitor digital</h1>
-        <div>
-          <a href="/auth/logout" class="logout-link">Sair</a>
-          <button id="dark">Dark Mode</button>
+    <a class="skip-link" href="#catalogo">Ir para o catálogo</a>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <div class="brand">
+          <p class="brand__eyebrow">Portfolio · Node + Express</p>
+          <h1 class="brand__title">Sebo leitor digital</h1>
+          <p class="brand__tagline">
+            Obras em <strong>português</strong> (domínio público) via
+            <a href="https://gutendex.com/" rel="noopener noreferrer" target="_blank">Gutendex</a>.
+            Login Google é <strong>opcional</strong> — use para favoritos e para o PDF de exemplo no repositório.
+          </p>
+        </div>
+        <div class="site-header__actions" id="authNav" aria-live="polite">
+          <a class="btn btn--ghost" href="/login.html" id="linkEntrar">Entrar com Google</a>
+          <span class="user-chip hidden" id="userChip"></span>
+          <a class="btn btn--ghost hidden" href="/auth/logout" id="linkSair">Sair</a>
+          <button type="button" class="btn btn--theme" id="dark" aria-pressed="false">Dark mode</button>
         </div>
       </div>
-      <p>Sebo leitor digital e um site com um acervo ainda pequeno de livros e quadrinhos. Faca bom proveito dos livros disponiveis no site.</p>
     </header>
 
-    <section id="detalhes">
-      <h2>Detalhes do livro</h2>
-      <p id="textoDescricao">Clique na capa do livro para ler a descricao.</p>
+    <main class="main">
+      <section class="panel" id="catalogo" aria-labelledby="catalogoTitulo">
+        <div class="panel__head">
+          <h2 id="catalogoTitulo">Catálogo Gutendex</h2>
+          <p class="panel__hint">Busca e paginação direto da API. Capas e metadados podem vir do Project Gutenberg.</p>
+        </div>
+        <form class="toolbar" id="formBusca" role="search" aria-label="Buscar livros">
+          <label class="sr-only" for="campoBusca">Buscar por título ou autor</label>
+          <input
+            id="campoBusca"
+            class="input"
+            type="search"
+            name="search"
+            placeholder="Ex.: machado, poetry, romance…"
+            autocomplete="off"
+            maxlength="256"
+          >
+          <button type="submit" class="btn btn--primary">Buscar</button>
+        </form>
+        <p class="status-msg hidden" id="catalogoStatus" role="status"></p>
+        <div class="pager hidden" id="pager" aria-label="Paginação">
+          <button type="button" class="btn btn--ghost" id="btnAnterior">Anterior</button>
+          <span class="pager__info" id="pagerInfo"></span>
+          <button type="button" class="btn btn--ghost" id="btnProximo">Próximo</button>
+        </div>
+        <div class="card-grid" id="listaLivros" aria-live="polite"></div>
+      </section>
 
-      <div class="item" data-descricao="Duna e um romance de ficcao cientifica que narra a historia de Paul Atreides e sua familia no planeta desertico Arrakis, onde se encontra a especiaria mais valiosa do universo.">
-        <img src="Imagens/Duna.png" alt="Capa do livro Duna">
-        <h3>Duna</h3>
-        <p>Autor: Frank Herbert</p>
-        <a href="/api/download/duna" class="botao-download">Baixar PDF</a>
-      </div>
+      <section class="panel panel--accent" id="favoritos" aria-labelledby="favTitulo">
+        <div class="panel__head">
+          <h2 id="favTitulo">Favoritos</h2>
+          <p class="panel__hint">Disponível após entrar com Google. Os dados ficam na sessão (sem banco).</p>
+        </div>
+        <p class="status-msg hidden" id="favoritosStatus" role="status"></p>
+        <div class="card-grid" id="listaFavoritos"></div>
+      </section>
 
-      <div class="item" data-descricao="A biografia de Steve Jobs, escrita por Walter Isaacson, e considerada a obra mais completa sobre a vida e a carreira do cofundador da Apple.">
-        <img src="Imagens/jobs.jfif" alt="Capa do livro Steve Jobs">
-        <h3>Steve Jobs</h3>
-        <p>Autor: Walter Isaacson</p>
-        <a href="/api/download/jobs" class="botao-download">Baixar PDF</a>
-      </div>
+      <section class="panel" aria-labelledby="localTitulo">
+        <div class="panel__head">
+          <h2 id="localTitulo">PDF local (portfolio)</h2>
+          <p class="panel__hint">Arquivo versionado no repositório — download apenas com login, para demonstrar rota protegida.</p>
+        </div>
+        <div class="card card--horizontal">
+          <div class="card__body">
+            <h3 class="card__title">Código limpo (exemplo)</h3>
+            <p class="card__meta">Robert C. Martin · PDF no servidor</p>
+            <a class="btn btn--primary" href="/api/download/codigolimpo" id="linkPdfLocal">Baixar PDF</a>
+            <p class="card__note hidden" id="pdfLocalAviso">Faça login para baixar este arquivo.</p>
+          </div>
+        </div>
+      </section>
+    </main>
 
-      <div class="item" data-descricao="O Livro de Sao Cipriano e uma obra que combina elementos do catolicismo popular, da bruxaria iberica, da magia negra, do espiritismo, da demonologia e da santaria cristianizada.">
-        <img src="Imagens/LNSC.jpg" alt="Capa do livro Sao Cipriano">
-        <h3>Sao Cipriano</h3>
-        <p>Autor: Sao Cipriano</p>
-        <a href="/api/download/saocipriano" class="botao-download">Baixar PDF</a>
-      </div>
-
-      <div class="item" data-descricao="Codigo limpo e um estilo de programacao que prioriza legibilidade, manutencao e eficiencia, permitindo que outros desenvolvedores compreendam e modifiquem o codigo facilmente.">
-        <img src="Imagens/codigolimpo.png" alt="Capa do livro Codigo limpo">
-        <h3>Codigo limpo</h3>
-        <p>Autor: Robert C. Martin</p>
-        <a href="/api/download/codigolimpo" class="botao-download">Baixar PDF</a>
-      </div>
-    </section>
-
-    <footer>
-      <p>Copyright 2026 Sebo leitor digital</p>
+    <footer class="site-footer">
+      <p>Copyright 2026 Sebo leitor digital · Dados Gutendex / Project Gutenberg (domínio público).</p>
     </footer>
-    <script src="script.js"></script>
+    <script src="/script.js"></script>
   </body>
 </html>
