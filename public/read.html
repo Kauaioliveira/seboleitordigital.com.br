@@ -3,24 +3,48 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ler livro — Sebo leitor digital</title>
-    <meta name="description" content="Leitor embutido para obras em domínio público (Project Gutenberg).">
-    <link rel="stylesheet" href="/style.css">
+    <title>Lendo · Sebo Leitor Digital</title>
+    <meta name="description" content="Leitor de obras em domínio público do Project Gutenberg.">
+    <meta name="theme-color" content="#2a2622">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <script src="/theme.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;1,9..40,400&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
   </head>
   <body class="read-page">
     <header class="read-header">
-      <a class="btn btn--ghost" href="/">← Catálogo</a>
-      <h1 class="read-header__title" id="readTitle">Carregando…</h1>
-      <a class="btn btn--ghost hidden" href="#" id="readExternal" target="_blank" rel="noopener noreferrer">Abrir na origem</a>
+      <a class="btn btn--ghost btn--sm" href="/" id="voltarCatalogo">← Catálogo</a>
+      <div class="read-header__info">
+        <h1 class="read-header__title" id="readTitle">Abrindo livro…</h1>
+        <p class="read-header__author" id="readAuthor"></p>
+      </div>
+      <div class="read-tools hidden" id="readTools" role="toolbar" aria-label="Ajustes de leitura">
+        <div class="segmented" role="group" aria-label="Tamanho do texto">
+          <button type="button" class="btn btn--ghost btn--sm" id="fonteMenor" aria-label="Diminuir texto">A−</button>
+          <button type="button" class="btn btn--ghost btn--sm" id="fonteMaior" aria-label="Aumentar texto">A+</button>
+        </div>
+        <div class="segmented" role="group" aria-label="Cor da página">
+          <button type="button" class="btn btn--ghost btn--sm swatch swatch--claro" data-tema-leitor="claro" aria-label="Página clara"></button>
+          <button type="button" class="btn btn--ghost btn--sm swatch swatch--sepia" data-tema-leitor="sepia" aria-label="Página sépia"></button>
+          <button type="button" class="btn btn--ghost btn--sm swatch swatch--escuro" data-tema-leitor="escuro" aria-label="Página escura"></button>
+        </div>
+        <a class="btn btn--ghost btn--sm hidden" href="#" id="readExternal" target="_blank" rel="noopener noreferrer" aria-label="Abrir no Project Gutenberg (nova aba)"><span class="rotulo-longo">Abrir no Gutenberg</span> ↗</a>
+      </div>
+      <div class="read-progress" aria-hidden="true"><span id="readProgress"></span></div>
     </header>
-    <p class="status-msg hidden" id="readStatus" role="status"></p>
+    <p class="status-msg read-status hidden" id="readStatus" role="status"></p>
     <div class="read-frame-wrap hidden" id="readFrameWrap">
-      <iframe class="read-frame" id="readFrame" title="Conteúdo do livro" sandbox="allow-same-origin allow-scripts"></iframe>
+      <iframe
+        class="read-frame"
+        id="readFrame"
+        title="Texto do livro"
+        sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+      ></iframe>
     </div>
     <div class="read-fallback hidden" id="readFallback"></div>
+    <script src="/historico.js"></script>
     <script src="/read.js"></script>
   </body>
 </html>

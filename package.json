@@ -1,7 +1,7 @@
 {
   "name": "seboleitordigital.com.br",
   "version": "1.0.0",
-  "description": "É um site com  um acervo ainda pequeno de livros e quadrinhos.\r Façam um bom proveito dos livros disponivel no site!\r Mas para além disso, esse projeto foi é onde estudo e coloco o que estou aprendendo em pratica HTML, CSS.",
+  "description": "Clássicos em português, em domínio público, para ler grátis no navegador (Gutendex / Project Gutenberg). Projeto de portfólio em Node.js e Express.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -11,9 +11,15 @@
     "type": "git",
     "url": "git+https://github.com/Kauaioliveira/seboleitordigital.com.br.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "gutenberg",
+    "gutendex",
+    "livros",
+    "leitor",
+    "express"
+  ],
+  "author": "Kauai Oliveira",
+  "license": "MIT",
   "type": "commonjs",
   "bugs": {
     "url": "https://github.com/Kauaioliveira/seboleitordigital.com.br/issues"
@@ -36,5 +42,8 @@
     "pino": "^10.3.1",
     "pino-http": "^11.0.0",
     "redis": "^6.0.0"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

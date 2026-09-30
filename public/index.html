@@ -3,74 +3,104 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sebo leitor digital — domínio público (Gutendex)</title>
+    <title>Sebo Leitor Digital · clássicos em português para ler grátis</title>
     <meta
       name="description"
-      content="Catálogo de livros em português (domínio público) via Gutendex, leitura e download. PDF local de exemplo com login Google."
+      content="Clássicos da literatura em português, em domínio público, para ler grátis direto no navegador. Catálogo do Project Gutenberg."
     >
-    <meta property="og:title" content="Sebo leitor digital">
-    <meta property="og:description" content="Catálogo Gutendex + leitor. Login opcional para favoritos e PDF de portfolio.">
+    <meta name="theme-color" content="#2a2622">
+    <meta property="og:title" content="Sebo Leitor Digital">
+    <meta property="og:description" content="Clássicos em português, em domínio público, para ler grátis no navegador.">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="pt_BR">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <script src="/theme.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
   </head>
   <body>
     <a class="skip-link" href="#catalogo">Ir para o catálogo</a>
-    <header class="site-header">
-      <div class="site-header__inner">
-        <div class="brand">
-          <p class="brand__eyebrow">Portfolio · Node + Express</p>
-          <h1 class="brand__title">Sebo leitor digital</h1>
-          <p class="brand__tagline">
-            Obras em <strong>português</strong> (domínio público) via
-            <a href="https://gutendex.com/" rel="noopener noreferrer" target="_blank">Gutendex</a>.
-            Login Google é <strong>opcional</strong> — use para favoritos e para o PDF de exemplo no repositório.
-          </p>
-        </div>
-        <div class="site-header__actions" id="authNav" aria-live="polite">
-          <a class="btn btn--ghost" href="/login.html" id="linkEntrar">Entrar com Google</a>
+    <header class="topbar">
+      <div class="topbar__inner">
+        <a class="logo" href="/" aria-label="Sebo Leitor Digital, página inicial">
+          <img src="/favicon.svg" alt="" width="32" height="32">
+          <span>Sebo Leitor Digital</span>
+        </a>
+        <nav class="topbar__actions" id="authNav" aria-label="Conta">
+          <a class="link-nav" href="#favoritos">Favoritos</a>
+          <a class="btn btn--ghost btn--sm" href="/login.html" id="linkEntrar">Entrar</a>
           <span class="user-chip hidden" id="userChip"></span>
-          <a class="btn btn--ghost hidden" href="/auth/logout" id="linkSair">Sair</a>
-          <button type="button" class="btn btn--theme" id="dark" aria-pressed="false">Dark mode</button>
-        </div>
+          <a class="btn btn--ghost btn--sm hidden" href="/auth/logout" id="linkSair">Sair</a>
+          <button type="button" class="btn btn--ghost btn--sm btn--icon" data-alternar-tema aria-pressed="false" aria-label="Usar tema escuro">
+            <span data-icone-tema aria-hidden="true">☾</span>
+          </button>
+        </nav>
       </div>
     </header>
 
-    <main class="main">
-      <section class="panel" id="catalogo" aria-labelledby="catalogoTitulo">
-        <div class="panel__head">
-          <h2 id="catalogoTitulo">Catálogo Gutendex</h2>
-          <p class="panel__hint">Busca e paginação direto da API. Capas e metadados podem vir do Project Gutenberg.</p>
-        </div>
-        <form class="toolbar" id="formBusca" role="search" aria-label="Buscar livros">
+    <section class="hero" aria-labelledby="heroTitulo">
+      <div class="hero__inner">
+        <h1 id="heroTitulo" class="hero__title">Clássicos em português, grátis, direto no navegador.</h1>
+        <p class="hero__lead">
+          Machado de Assis, Eça de Queirós, Camões e centenas de outras obras em domínio público,
+          do acervo do Project Gutenberg. Não precisa de cadastro para ler.
+        </p>
+        <form class="search" id="formBusca" role="search" aria-label="Buscar livros">
           <label class="sr-only" for="campoBusca">Buscar por título ou autor</label>
           <input
             id="campoBusca"
-            class="input"
+            class="input search__input"
             type="search"
-            name="search"
-            placeholder="Ex.: machado, poetry, romance…"
+            name="q"
+            placeholder="Busque por título ou autor"
             autocomplete="off"
             maxlength="256"
           >
           <button type="submit" class="btn btn--primary">Buscar</button>
         </form>
-        <p class="status-msg hidden" id="catalogoStatus" role="status"></p>
-        <div class="pager hidden" id="pager" aria-label="Paginação">
-          <button type="button" class="btn btn--ghost" id="btnAnterior">Anterior</button>
-          <span class="pager__info" id="pagerInfo"></span>
-          <button type="button" class="btn btn--ghost" id="btnProximo">Próximo</button>
+        <div class="chips" aria-label="Sugestões de busca">
+          <span class="chips__label">Experimente:</span>
+          <button type="button" class="chip" data-sugestao="Machado de Assis">Machado de Assis</button>
+          <button type="button" class="chip" data-sugestao="Eça de Queirós">Eça de Queirós</button>
+          <button type="button" class="chip" data-sugestao="Camões">Camões</button>
+          <button type="button" class="chip" data-sugestao="José de Alencar">José de Alencar</button>
+          <button type="button" class="chip" data-sugestao="Aluísio Azevedo">Aluísio Azevedo</button>
         </div>
-        <div class="card-grid" id="listaLivros" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <main class="main">
+      <section class="panel hidden" id="continuar" aria-labelledby="continuarTitulo">
+        <div class="panel__head panel__head--row">
+          <h2 id="continuarTitulo">Continuar lendo</h2>
+          <button type="button" class="btn-link" id="limparHistorico">Limpar histórico</button>
+        </div>
+        <div class="shelf" id="listaContinuar"></div>
+      </section>
+
+      <section class="panel" id="catalogo" aria-labelledby="catalogoTitulo" tabindex="-1">
+        <div class="panel__head panel__head--row">
+          <div>
+            <h2 id="catalogoTitulo">Catálogo</h2>
+            <p class="panel__hint" id="catalogoResumo">Obras mais lidas em português.</p>
+          </div>
+          <button type="button" class="btn btn--ghost btn--sm hidden" id="limparBusca">Limpar busca</button>
+        </div>
+        <p class="status-msg hidden" id="catalogoStatus" role="status"></p>
+        <div class="card-grid" id="listaLivros" aria-live="polite" aria-busy="false"></div>
+        <nav class="pager hidden" id="pager" aria-label="Paginação">
+          <button type="button" class="btn btn--ghost" id="btnAnterior">← Anterior</button>
+          <span class="pager__info" id="pagerInfo"></span>
+          <button type="button" class="btn btn--ghost" id="btnProximo">Próxima →</button>
+        </nav>
       </section>
 
       <section class="panel panel--accent" id="favoritos" aria-labelledby="favTitulo">
         <div class="panel__head">
-          <h2 id="favTitulo">Favoritos</h2>
-          <p class="panel__hint">Disponível após entrar com Google. Os dados ficam na sessão (sem banco).</p>
+          <h2 id="favTitulo">Seus favoritos</h2>
+          <p class="panel__hint" id="favoritosHint">Marque ☆ em qualquer livro para guardar aqui.</p>
         </div>
         <p class="status-msg hidden" id="favoritosStatus" role="status"></p>
         <div class="card-grid" id="listaFavoritos"></div>
@@ -78,23 +108,33 @@
 
       <section class="panel" aria-labelledby="localTitulo">
         <div class="panel__head">
-          <h2 id="localTitulo">PDF local (portfolio)</h2>
-          <p class="panel__hint">Arquivo versionado no repositório — download apenas com login, para demonstrar rota protegida.</p>
+          <h2 id="localTitulo">Área com login (demonstração)</h2>
+          <p class="panel__hint">Um PDF de exemplo, gerado para este projeto, que só baixa com login. Serve para mostrar uma rota protegida no servidor.</p>
         </div>
-        <div class="card card--horizontal">
-          <div class="card__body">
-            <h3 class="card__title">Código limpo (exemplo)</h3>
-            <p class="card__meta">Robert C. Martin · PDF no servidor</p>
-            <a class="btn btn--primary" href="/api/download/codigolimpo" id="linkPdfLocal">Baixar PDF</a>
-            <p class="card__note hidden" id="pdfLocalAviso">Faça login para baixar este arquivo.</p>
+        <div class="demo-box">
+          <div>
+            <p class="demo-box__title">PDF de exemplo</p>
+            <p class="card__meta">1 página · sem conteúdo de terceiros</p>
           </div>
+          <a class="btn btn--primary" href="/api/download/codigolimpo" id="linkPdfLocal">Baixar PDF</a>
         </div>
+        <p class="card__note hidden" id="pdfLocalAviso">Você vai precisar entrar com Google para baixar.</p>
       </section>
     </main>
 
     <footer class="site-footer">
-      <p>Copyright 2026 Sebo leitor digital · Dados Gutendex / Project Gutenberg (domínio público).</p>
+      <p>
+        Textos e capas do <a href="https://www.gutenberg.org/" rel="noopener noreferrer" target="_blank">Project Gutenberg</a>,
+        via <a href="https://gutendex.com/" rel="noopener noreferrer" target="_blank">Gutendex</a>. Obras em domínio público.
+      </p>
+      <p>
+        Projeto de portfólio de Kauai Oliveira · Node.js e Express ·
+        <a href="https://github.com/Kauaioliveira/seboleitordigital.com.br" rel="noopener noreferrer" target="_blank">código no GitHub</a>
+      </p>
     </footer>
+
+    <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+    <script src="/historico.js"></script>
     <script src="/script.js"></script>
   </body>
 </html>
