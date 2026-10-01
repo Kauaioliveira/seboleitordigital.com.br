@@ -125,6 +125,29 @@ describe('GET /api/read-proxy (endurecimento)', () => {
     assert.ok(String(res.text).includes('/cache/epub/1/pg1-images.html"'));
   });
 
+  test('redirect para http do proprio gutenberg vira https', async () => {
+    nock('https://www.gutenberg.org')
+      .get('/ebooks/2.html.images')
+      .reply(302, '', { Location: 'http://www.gutenberg.org/cache/epub/2/pg2-images.html' })
+      .get('/cache/epub/2/pg2-images.html')
+      .reply(200, '<html><head></head><body>ok</body></html>', { 'Content-Type': 'text/html' });
+
+    const u = encodeURIComponent('https://www.gutenberg.org/ebooks/2.html.images');
+    const res = await request(app).get(`/api/read-proxy?url=${u}`).expect(200);
+    assert.ok(
+      String(res.text).includes('<base href="https://www.gutenberg.org/cache/epub/2/pg2-images.html">')
+    );
+  });
+
+  test('redirect para http fora do gutenberg continua bloqueado', async () => {
+    nock('https://www.gutenberg.org')
+      .get('/redir-http.html')
+      .reply(302, '', { Location: 'http://evil.example/x' });
+
+    const u = encodeURIComponent('https://www.gutenberg.org/redir-http.html');
+    await request(app).get(`/api/read-proxy?url=${u}`).expect(403);
+  });
+
   test('bloqueia redirect para host fora do gutenberg', async () => {
     nock('https://www.gutenberg.org')
       .get('/redir.html')

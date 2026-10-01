@@ -38,7 +38,7 @@ Projeto de estudo e portfólio. A análise crítica mais recente e o que ficou p
 | Variável | Obrigatória | Descrição |
 |----------|-------------|-----------|
 | `SESSION_SECRET` | Sim | Segredo da sessão |
-| `GOOGLE_CLIENT_ID` | Para login Google | OAuth Client ID |
+| `GOOGLE_CLIENT_ID` | Não | OAuth Client ID. Sem ele (ou sem o secret) o site sobe com o login desligado |
 | `GOOGLE_CLIENT_SECRET` | Para login Google | OAuth Client Secret |
 | `PORT` | Não | Porta (padrão 3000) |
 | `GOOGLE_CALLBACK_URL` | Não | URL de callback (padrão `http://localhost:PORT/auth/google/callback`) |

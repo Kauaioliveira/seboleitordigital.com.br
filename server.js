@@ -24,6 +24,10 @@ const GUTENDEX_ORIGIN = 'https://gutendex.com';
 const GUTENDEX_CACHE_MS = 60_000;
 const gutendexCache = new Map();
 const testMode = process.env.NODE_ENV === 'test';
+// Sem as chaves do Google o site sobe normalmente; so o login fica desligado.
+const googleConfigurado = Boolean(
+  process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+);
 const prodMode = process.env.NODE_ENV === 'production';
 
 if (!SESSION_SECRET) {
@@ -184,6 +188,10 @@ async function buscarSeguindoRedirects(inicial) {
       return { upstream, finalUrl: atual };
     }
     const proximo = new URL(location, atual);
+    // O Gutenberg as vezes redireciona para http://; dentro do proprio Gutenberg, sobe para https.
+    if (proximo.protocol === 'http:' && isAllowedReadHost(proximo.hostname)) {
+      proximo.protocol = 'https:';
+    }
     const invalido = validarUrlLeitura(proximo);
     if (invalido) {
       const err = new Error('redirect para host nao permitido.');
@@ -348,22 +356,31 @@ function registerSessionPassportRoutes(sessionStore) {
   passport.serializeUser((user, done) => done(null, user));
   passport.deserializeUser((user, done) => done(null, user));
 
-  passport.use(
-    new GoogleStrategy(
-      {
-        clientID: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: GOOGLE_CALLBACK_URL
-      },
-      (accessToken, refreshToken, profile, done) => {
-        done(null, {
-          id: profile.id,
-          email: profile.emails?.[0]?.value,
-          name: profile.displayName
-        });
-      }
-    )
-  );
+  if (googleConfigurado) {
+    passport.use(
+      new GoogleStrategy(
+        {
+          clientID: process.env.GOOGLE_CLIENT_ID,
+          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+          callbackURL: GOOGLE_CALLBACK_URL
+        },
+        (accessToken, refreshToken, profile, done) => {
+          done(null, {
+            id: profile.id,
+            email: profile.emails?.[0]?.value,
+            name: profile.displayName
+          });
+        }
+      )
+    );
+  } else {
+    logger.warn('GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET ausentes: login com Google desligado');
+  }
+
+  function exigeGoogle(req, res, next) {
+    if (googleConfigurado) return next();
+    res.redirect('/login.html');
+  }
 
   app.get('/login.html', (req, res) => {
     if (req.isAuthenticated()) {
@@ -380,12 +397,14 @@ function registerSessionPassportRoutes(sessionStore) {
   app.get(
     '/auth/google',
     authLimiter,
+    exigeGoogle,
     passport.authenticate('google', { scope: ['profile', 'email'] })
   );
 
   app.get(
     '/auth/google/callback',
     authLimiter,
+    exigeGoogle,
     passport.authenticate('google', { failureRedirect: '/login.html' }),
     (req, res) => {
       res.redirect('/');
@@ -405,10 +424,11 @@ function registerSessionPassportRoutes(sessionStore) {
 
   app.get('/api/auth/me', (req, res) => {
     if (!req.isAuthenticated()) {
-      return res.json({ authenticated: false });
+      return res.json({ authenticated: false, loginDisponivel: googleConfigurado });
     }
     res.json({
       authenticated: true,
+      loginDisponivel: googleConfigurado,
       user: {
         name: req.user.name,
         email: req.user.email
