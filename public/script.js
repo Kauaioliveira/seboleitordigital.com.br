@@ -164,6 +164,10 @@ async function carregarAuth() {
   if (logado) {
     userChip.textContent = authState.user.name || authState.user.email || 'Conectado';
   }
+  if (authState.loginDisponivel === false) {
+    linkEntrar.classList.add('hidden');
+    pdfLocalAviso.textContent = 'O login não está configurado neste servidor, então o download fica bloqueado.';
+  }
 
   await carregarFavoritosLista();
 }
@@ -183,6 +187,13 @@ function atualizarEstrelas() {
 }
 
 async function carregarFavoritosLista() {
+  if (!authState.authenticated && authState.loginDisponivel === false) {
+    favoritoIds = new Set();
+    favoritosHint.textContent = 'Favoritos precisam de login, que não está configurado neste servidor.';
+    listaFavoritos.innerHTML = '';
+    mostrarStatus(favoritosStatus, '', false);
+    return;
+  }
   if (!authState.authenticated) {
     favoritoIds = new Set();
     favoritosHint.textContent = 'Entre com Google para guardar seus livros favoritos.';
@@ -207,6 +218,10 @@ async function carregarFavoritosLista() {
 }
 
 async function alternarFavorito(id) {
+  if (!authState.authenticated && authState.loginDisponivel === false) {
+    avisar('Favoritos precisam de login, que não está configurado neste servidor.');
+    return;
+  }
   if (!authState.authenticated) {
     avisar('Para salvar favoritos, <a href="/login.html">entre com Google</a>.');
     return;
