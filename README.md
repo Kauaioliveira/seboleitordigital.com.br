@@ -1,6 +1,16 @@
 # Sebo Leitor Digital
 
-Sebo digital de estudo/portfólio: catálogo em **português** via [Gutendex](https://gutendex.com/) (metadados do **Project Gutenberg**, domínio público), leitor embutido com proxy seguro para HTML/texto do Gutenberg, e um **PDF local** protegido por login Google para demonstrar OAuth e rotas privadas.
+Clássicos em português, em domínio público, para ler grátis no navegador. O catálogo vem do [Gutendex](https://gutendex.com/) (metadados do **Project Gutenberg**) e o texto abre num leitor próprio, com ajuste de letra, página clara/sépia/escura e "continuar lendo" de onde parou. Login Google é opcional: serve para favoritos e para baixar um **PDF de exemplo** numa rota protegida.
+
+Projeto de estudo e portfólio. A análise crítica mais recente e o que ficou para depois estão em [`docs/ANALISE-CRITICA.md`](docs/ANALISE-CRITICA.md).
+
+## Funcionalidades
+
+- Busca por título ou autor, com sugestões e estado na URL (`/?q=machado&page=2`), então voltar e compartilhar funcionam.
+- Leitor com tamanho de letra, três cores de página, barra de progresso, sumário clicável e posição salva no navegador.
+- "Continuar lendo" na página inicial (histórico só no `localStorage`, nada vai para o servidor).
+- Favoritos na sessão para quem entra com Google.
+- Tema claro/escuro que segue o sistema, em todas as páginas.
 
 ## Tecnologias
 
@@ -19,6 +29,7 @@ Sebo digital de estudo/portfólio: catálogo em **português** via [Gutendex](ht
 | Recurso | Autenticação |
 |--------|----------------|
 | Home, busca Gutendex, `/read.html`, proxy de leitura (`/api/read-proxy`) | Público |
+| Histórico "continuar lendo" e ajustes do leitor | Público (ficam no navegador) |
 | Favoritos (`/api/favorites`) | Google (sessão) |
 | Download do PDF em `livros/` (`/api/download/:id`) | Google |
 
@@ -57,13 +68,16 @@ Abra `http://localhost:3000` — o catálogo carrega da API local `/api/livros`,
 npm test
 ```
 
+Os testes também rodam no GitHub Actions a cada push e PR (`.github/workflows/testes.yml`).
+
 Usa `node:test`, `supertest` e `nock` para simular o Gutendex sem rede. Com `NODE_ENV=test`, existe `GET /__test/login` para simular usuário logado (sem Helmet, Sentry, Redis nem rate limit agressivo).
 
 ## Notas legais e de produto
 
 - O Gutendex não substitui uma “sinopse editorial”; use **subjects** e metadados como resumo curto.
 - PDFs comerciais **não** devem ser distribuídos sem licença; o acervo Gutendex é domínio público nos termos do Project Gutenberg.
-- O proxy `/api/read-proxy` só aceita hosts **gutenberg.org** (mitigação de SSRF), **HTTPS**, URLs sem credenciais embutidas e tamanho limitado.
+- O proxy `/api/read-proxy` só aceita hosts **gutenberg.org** (mitigação de SSRF), **HTTPS** e URLs sem credenciais. Redirects são seguidos manualmente, validando o host em cada salto; só HTML e texto passam (415 para o resto); o limite é 12 MB (413).
+- O texto do livro abre num iframe **sem permissão de script**, e a resposta do proxy leva CSP `script-src 'none'`, para que nenhum script do conteúdo externo rode na origem do site.
 
 ## Segurança e Git
 

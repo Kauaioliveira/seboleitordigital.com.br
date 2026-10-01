@@ -77,7 +77,8 @@ if (!testMode) {
               connectSrc: ["'self'"],
               frameSrc: ["'self'"],
               frameAncestors: ["'self'"],
-              baseUri: ["'self'"],
+              // O leitor injeta <base> do Gutenberg no texto (iframe srcdoc herda esta CSP).
+              baseUri: ["'self'", 'https://www.gutenberg.org', 'https://gutenberg.org'],
               formAction: ["'self'", 'https://accounts.google.com'],
               upgradeInsecureRequests: []
             }
@@ -137,6 +138,90 @@ function isAllowedReadHost(hostname) {
   );
 }
 
+const READ_PROXY_MAX_BYTES = 12 * 1024 * 1024;
+const READ_PROXY_MAX_REDIRECTS = 4;
+// O conteudo do Gutenberg roda na nossa origem (iframe): nada de scripts.
+const READ_PROXY_CSP = [
+  "default-src 'none'",
+  "script-src 'none'",
+  "style-src 'unsafe-inline' https:",
+  'img-src https: data:',
+  'font-src https: data:',
+  'base-uri https:',
+  "form-action 'none'",
+  "frame-ancestors 'self'"
+].join('; ');
+
+function validarUrlLeitura(target) {
+  if (target.protocol !== 'https:') {
+    return { status: 400, error: 'apenas https.' };
+  }
+  if (target.username || target.password) {
+    return { status: 400, error: 'url com credenciais nao permitida.' };
+  }
+  if (!isAllowedReadHost(target.hostname)) {
+    return { status: 403, error: 'host nao permitido.' };
+  }
+  return null;
+}
+
+// Segue redirects manualmente para validar o host de cada salto (evita SSRF via redirect).
+async function buscarSeguindoRedirects(inicial) {
+  let atual = inicial;
+  for (let salto = 0; salto <= READ_PROXY_MAX_REDIRECTS; salto += 1) {
+    const upstream = await fetch(atual, {
+      redirect: 'manual',
+      headers: {
+        'User-Agent':
+          'SeboLeitorDigital/1.0 (portfolio; +https://github.com/Kauaioliveira/seboleitordigital.com.br)'
+      }
+    });
+    if (upstream.status < 300 || upstream.status >= 400) {
+      return { upstream, finalUrl: atual };
+    }
+    const location = upstream.headers.get('location');
+    if (!location) {
+      return { upstream, finalUrl: atual };
+    }
+    const proximo = new URL(location, atual);
+    const invalido = validarUrlLeitura(proximo);
+    if (invalido) {
+      const err = new Error('redirect para host nao permitido.');
+      err.status = 403;
+      throw err;
+    }
+    atual = proximo;
+  }
+  const err = new Error('redirects demais.');
+  err.status = 502;
+  throw err;
+}
+
+async function lerCorpoComLimite(upstream, limite) {
+  const declarado = Number(upstream.headers.get('content-length'));
+  const muitoGrande = () => {
+    const err = new Error('conteudo grande demais para o leitor.');
+    err.status = 413;
+    return err;
+  };
+  if (Number.isFinite(declarado) && declarado > limite) {
+    throw muitoGrande();
+  }
+  if (!upstream.body) return Buffer.alloc(0);
+  const partes = [];
+  let total = 0;
+  for await (const parte of upstream.body) {
+    total += parte.length;
+    if (total > limite) throw muitoGrande();
+    partes.push(Buffer.from(parte));
+  }
+  return Buffer.concat(partes);
+}
+
+function escapeHtmlAttr(text) {
+  return escapeHtmlPlain(text).replace(/"/g, '&quot;');
+}
+
 const READER_INJECT_SNIPPET = `<meta name="color-scheme" content="light only">
 <style id="sebo-leitor-fix">
 :root, html { color-scheme: light only !important; }
@@ -146,15 +231,18 @@ a:link { color: #0b57d0 !important; }
 a:visited { color: #6b2d92 !important; }
 </style>`;
 
-function injectReaderHtmlFixes(htmlBuffer) {
+function injectReaderHtmlFixes(htmlBuffer, baseHref) {
   const s = htmlBuffer.toString('utf8');
+  // <base> faz imagens e CSS relativos do Gutenberg carregarem da origem certa.
+  const base = baseHref ? `<base href="${escapeHtmlAttr(baseHref)}">` : '';
+  const snippet = `${base}${READER_INJECT_SNIPPET}`;
   if (/<head(\s[^>]*)?>/i.test(s)) {
-    return s.replace(/<head(\s[^>]*)?>/i, (m) => `${m}${READER_INJECT_SNIPPET}`);
+    return s.replace(/<head(\s[^>]*)?>/i, (m) => `${m}${snippet}`);
   }
   if (/<html(\s[^>]*)?>/i.test(s)) {
-    return s.replace(/<html(\s[^>]*)?>/i, (m) => `${m}<head>${READER_INJECT_SNIPPET}</head>`);
+    return s.replace(/<html(\s[^>]*)?>/i, (m) => `${m}<head>${snippet}</head>`);
   }
-  return `<!DOCTYPE html><html lang="pt"><head><meta charset="utf-8">${READER_INJECT_SNIPPET}</head><body>${s}</body></html>`;
+  return `<!DOCTYPE html><html lang="pt"><head><meta charset="utf-8">${snippet}</head><body>${s}</body></html>`;
 }
 
 function escapeHtmlPlain(text) {
@@ -383,58 +471,51 @@ function registerSessionPassportRoutes(sessionStore) {
 
     let target;
     try {
-      target = new URL(decodeURIComponent(raw));
+      target = new URL(raw);
     } catch {
       return res.status(400).json({ error: 'url invalida.' });
     }
 
-    if (target.protocol !== 'https:') {
-      return res.status(400).json({ error: 'apenas https.' });
+    const invalido = validarUrlLeitura(target);
+    if (invalido) {
+      return res.status(invalido.status).json({ error: invalido.error });
     }
 
-    if (target.username || target.password) {
-      return res.status(400).json({ error: 'url com credenciais nao permitida.' });
-    }
-
-    if (!isAllowedReadHost(target.hostname)) {
-      return res.status(403).json({ error: 'host nao permitido.' });
-    }
-
+    let upstream;
     try {
-      const upstream = await fetch(target, {
-        headers: {
-          'User-Agent':
-            'SeboLeitorDigital/1.0 (portfolio; +https://github.com/Kauaioliveira/seboleitordigital.com.br)'
-        }
-      });
-      if (!upstream.ok) {
-        return res.status(502).json({ error: 'origem indisponivel.' });
-      }
-      const ct = upstream.headers.get('content-type') || 'text/plain; charset=utf-8';
-      res.setHeader('X-Frame-Options', 'SAMEORIGIN');
-
-      const buffer = Buffer.from(await upstream.arrayBuffer());
-      const lowerCt = ct.toLowerCase();
-
-      if (lowerCt.includes('text/html')) {
-        const fixed = injectReaderHtmlFixes(buffer);
-        res.setHeader('Content-Type', 'text/html; charset=utf-8');
-        res.send(Buffer.from(fixed, 'utf8'));
-        return;
-      }
-
-      if (lowerCt.includes('text/plain')) {
-        const wrapped = wrapPlainTextAsReadableHtml(buffer.toString('utf8'));
-        res.setHeader('Content-Type', 'text/html; charset=utf-8');
-        res.send(Buffer.from(wrapped, 'utf8'));
-        return;
-      }
-
-      res.setHeader('Content-Type', ct);
-      res.send(buffer);
-    } catch {
-      res.status(502).json({ error: 'falha ao buscar conteudo.' });
+      ({ upstream, finalUrl: target } = await buscarSeguindoRedirects(target));
+    } catch (e) {
+      if (e.status) return res.status(e.status).json({ error: e.message });
+      return res.status(502).json({ error: 'falha ao buscar conteudo.' });
     }
+
+    if (!upstream.ok) {
+      return res.status(502).json({ error: 'origem indisponivel.' });
+    }
+
+    const lowerCt = (upstream.headers.get('content-type') || '').toLowerCase();
+    const isHtml = lowerCt.includes('text/html');
+    const isPlain = lowerCt.includes('text/plain');
+    if (!isHtml && !isPlain) {
+      return res.status(415).json({ error: 'formato nao suportado no leitor.' });
+    }
+
+    let buffer;
+    try {
+      buffer = await lerCorpoComLimite(upstream, READ_PROXY_MAX_BYTES);
+    } catch (e) {
+      if (e.status) return res.status(e.status).json({ error: e.message });
+      return res.status(502).json({ error: 'falha ao buscar conteudo.' });
+    }
+
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    res.setHeader('Content-Security-Policy', READ_PROXY_CSP);
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+
+    const html = isHtml
+      ? injectReaderHtmlFixes(buffer, target.href)
+      : wrapPlainTextAsReadableHtml(buffer.toString('utf8'));
+    res.send(Buffer.from(html, 'utf8'));
   });
 
   app.get('/api/favorites', soLogadoApi, (req, res) => {
@@ -512,6 +593,14 @@ function registerSessionPassportRoutes(sessionStore) {
   });
 
   app.use(express.static(PUBLIC_DIR, { index: false }));
+
+  app.use('/api', (req, res) => {
+    res.status(404).json({ error: 'rota nao encontrada.' });
+  });
+
+  app.use((req, res) => {
+    res.status(404).sendFile(path.join(PUBLIC_DIR, '404.html'));
+  });
 
   if (!testMode && process.env.SENTRY_DSN) {
     try {

@@ -97,6 +97,87 @@ describe('GET /api/read-proxy', () => {
   });
 });
 
+describe('GET /api/read-proxy (endurecimento)', () => {
+  test('HTML recebe <base> da origem e CSP sem scripts', async () => {
+    nock('https://www.gutenberg.org')
+      .get('/cache/epub/1/pg1-images.html')
+      .reply(200, '<html><head></head><body><img src="images/a.jpg"></body></html>', {
+        'Content-Type': 'text/html'
+      });
+
+    const u = encodeURIComponent('https://www.gutenberg.org/cache/epub/1/pg1-images.html');
+    const res = await request(app).get(`/api/read-proxy?url=${u}`).expect(200);
+    assert.ok(
+      String(res.text).includes('<base href="https://www.gutenberg.org/cache/epub/1/pg1-images.html">')
+    );
+    assert.ok(String(res.headers['content-security-policy']).includes("script-src 'none'"));
+  });
+
+  test('segue redirect dentro do gutenberg e usa a URL final como base', async () => {
+    nock('https://www.gutenberg.org')
+      .get('/ebooks/1.html.images')
+      .reply(302, '', { Location: '/cache/epub/1/pg1-images.html' })
+      .get('/cache/epub/1/pg1-images.html')
+      .reply(200, '<html><head></head><body>ok</body></html>', { 'Content-Type': 'text/html' });
+
+    const u = encodeURIComponent('https://www.gutenberg.org/ebooks/1.html.images');
+    const res = await request(app).get(`/api/read-proxy?url=${u}`).expect(200);
+    assert.ok(String(res.text).includes('/cache/epub/1/pg1-images.html"'));
+  });
+
+  test('bloqueia redirect para host fora do gutenberg', async () => {
+    nock('https://www.gutenberg.org')
+      .get('/redir.html')
+      .reply(302, '', { Location: 'https://evil.example/x' });
+
+    const u = encodeURIComponent('https://www.gutenberg.org/redir.html');
+    await request(app).get(`/api/read-proxy?url=${u}`).expect(403);
+  });
+
+  test('recusa formatos que nao sao texto', async () => {
+    nock('https://www.gutenberg.org')
+      .get('/x.svg')
+      .reply(200, '<svg></svg>', { 'Content-Type': 'image/svg+xml' });
+
+    const u = encodeURIComponent('https://www.gutenberg.org/x.svg');
+    await request(app).get(`/api/read-proxy?url=${u}`).expect(415);
+  });
+
+  test('recusa conteudo acima do limite', async () => {
+    nock('https://www.gutenberg.org')
+      .get('/grande.txt')
+      .reply(200, 'x', {
+        'Content-Type': 'text/plain',
+        'Content-Length': String(50 * 1024 * 1024)
+      });
+
+    const u = encodeURIComponent('https://www.gutenberg.org/grande.txt');
+    await request(app).get(`/api/read-proxy?url=${u}`).expect(413);
+  });
+
+  test('texto simples vira HTML escapado', async () => {
+    nock('https://www.gutenberg.org')
+      .get('/livro.txt')
+      .reply(200, 'Capitulo <1>', { 'Content-Type': 'text/plain; charset=utf-8' });
+
+    const u = encodeURIComponent('https://www.gutenberg.org/livro.txt');
+    const res = await request(app).get(`/api/read-proxy?url=${u}`).expect(200);
+    assert.ok(String(res.text).includes('Capitulo &lt;1&gt;'));
+  });
+});
+
+describe('rotas inexistentes', () => {
+  test('API responde 404 em JSON', async () => {
+    const res = await request(app).get('/api/nao-existe').expect(404);
+    assert.equal(res.body.error, 'rota nao encontrada.');
+  });
+
+  test('pagina inexistente responde 404 em HTML', async () => {
+    const res = await request(app).get('/pagina-que-nao-existe').expect(404);
+    assert.ok(String(res.headers['content-type']).includes('html'));
+  });
+});
+
 describe('GET /api/auth/me', () => {
   test('nao autenticado retorna authenticated false', async () => {
     const res = await request(app).get('/api/auth/me').expect(200);
